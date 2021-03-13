@@ -1,5 +1,5 @@
-const { signupValidator, signinValidator } = require('./authValidator');
-const { createMovieValidator, movieIdValidator } = require('./movieValidator');
+const { signupValidator, signinValidator } = require('./authValidators');
+const { createMovieValidator, movieIdValidator } = require('./movieValidators');
 
 module.exports = {
   signupValidator,
