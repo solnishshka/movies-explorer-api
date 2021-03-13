@@ -1,11 +1,8 @@
 const router = require('express').Router();
+const { getUserInfo, updateProfile } = require('../controllers');
 
-router.get("/me", (req, res) => {
-  res.status(200).send({message: 'testGet'});
-});
+router.get('/me', getUserInfo);
 
-router.patch("/me", (req, res) => {
-  res.status(200).send({message: 'testPatch'});
-});
+router.patch('/me', updateProfile);
 
 module.exports = router;

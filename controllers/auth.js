@@ -1,14 +1,19 @@
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const User = require('../models/user');
-const { BadRequestError, ConflictError } = require('../errors/index');
 
-module.exports.signup = (req, res, next) => {
+const { NODE_ENV, JWT_SECRET } = process.env;
+const { BadRequestError, ConflictError } = require('../errors/index');
+const { messages } = require('../utils/const');
+
+const User = require('../models/user');
+
+module.exports.createUser = (req, res, next) => {
   const { name, email, password } = req.body;
 
   User.findOne({ email })
     .then((user) => {
       if (user) {
-        throw new ConflictError('Пользователь с таким email уже существует');
+        throw new ConflictError(messages[409]);
       }
 
       return bcrypt.hash(password, 10);
@@ -30,4 +35,14 @@ module.exports.signup = (req, res, next) => {
         next(err);
       }
     });
+};
+
+module.exports.login = (req, res, next) => {
+  const { email, password } = req.body;
+
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
+      res.send({ token });
+    }).catch((err) => next(err));
 };

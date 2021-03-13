@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const val = require('validator');
+const { messages } = require('../utils/const');
 
 const movieSchema = new mongoose.Schema(
   {
@@ -30,7 +31,7 @@ const movieSchema = new mongoose.Schema(
         validator(v) {
           return val.isURL(v);
         },
-        message: 'Невалидный URL!',
+        message: messages[400].url,
       },
     },
     trailer: {
@@ -40,7 +41,7 @@ const movieSchema = new mongoose.Schema(
         validator(v) {
           return val.isURL(v);
         },
-        message: 'Невалидный URL!',
+        message: messages[400].url,
       },
     },
     thumbnail: {
@@ -50,7 +51,7 @@ const movieSchema = new mongoose.Schema(
         validator(v) {
           return val.isURL(v);
         },
-        message: 'Невалидный URL!',
+        message: messages[400].url,
       },
     },
     owner: {

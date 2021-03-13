@@ -1,11 +1,12 @@
 const User = require('../models/user');
 const { NotFoundError, BadRequestError } = require('../errors/index');
+const { messages } = require('../utils/const');
 
 module.exports.getUserInfo = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError(`Пользователь с id: ${req.user._id} не найден`);
+        throw new NotFoundError(messages[404].user);
       }
       res.send(user);
     })
@@ -25,7 +26,7 @@ module.exports.updateProfile = (req, res, next) => {
   )
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Пользователь не найден');
+        throw new NotFoundError(messages[404].user);
       }
       res.send(user);
     })
