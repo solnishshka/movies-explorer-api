@@ -12,23 +12,16 @@ const { errors } = require('celebrate');
 
 const { rateLimiter } = require('./utils/rateLimiter');
 
-const auth = require('./middlewares/auth');
 const errorHandler = require('./middlewares/errorHandler');
 const { logger, errorLogger } = require('./middlewares/logger');
 
-const { NotFoundError } = require('./errors/index');
-const { messages } = require('./utils/const');
+const { databaseUrlDev } = require('./utils/const');
 
-const {
-  login,
-  createUser,
-  usersRoute,
-  moviesRoute,
-} = require('./routes');
+const router = require('./routes');
 
 const app = express();
 
-mongoose.connect(NODE_ENV === 'production' ? DATABASE_URL : 'mongodb://localhost:27017/bitfilmsdb', {
+mongoose.connect(NODE_ENV === 'production' ? DATABASE_URL : databaseUrlDev, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
@@ -36,6 +29,8 @@ mongoose.connect(NODE_ENV === 'production' ? DATABASE_URL : 'mongodb://localhost
 });
 
 app.use(cors());
+
+app.use(logger);
 
 app.use(rateLimiter);
 
@@ -47,16 +42,7 @@ app.use(express.urlencoded({
   extended: true,
 }));
 
-app.use(logger);
-
-app.use('/signup', createUser);
-app.use('/signin', login);
-app.use('/users', auth, usersRoute);
-app.use('/movies', auth, moviesRoute);
-
-app.use('*', (req, res, next) => {
-  next(new NotFoundError(messages[404].route));
-});
+app.use('/', router);
 
 app.use(errorLogger);
 

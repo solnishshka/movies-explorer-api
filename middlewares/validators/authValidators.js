@@ -4,9 +4,11 @@ const { messages } = require('../../utils/const');
 
 module.exports.signupValidator = celebrate({
   body: {
-    name: Joi.string().required()
+    name: Joi.string().required().min(2).max(30)
       .messages({
-        'any.required': messages[400].required,
+        'string.min': messages[400].min2,
+        'string.max': messages[400].max,
+        'string.required': messages[400].required,
       }),
     email: Joi.string().required().custom((value, helper) => {
       if (validator.isEmail(value)) {

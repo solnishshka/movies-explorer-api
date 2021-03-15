@@ -8,6 +8,7 @@ module.exports.messages = {
     required: 'Поле обязательно для заполнения',
     id: 'Невалидный id - может содержать только HEX-символы',
     minmax24: 'Невалидный id - должен содержать 24 символа',
+    min2: 'Минимум 2 символа',
     min: 'Минимум 8 символов',
     max: 'Максимум 30 символов',
   },
@@ -26,3 +27,5 @@ module.exports.messages = {
   409: 'Пользователь с таким email уже существует',
   default: 'Произошла ошибка на сервере',
 };
+
+module.exports.databaseUrlDev = 'mongodb://localhost:27017/bitfilmsdb';
